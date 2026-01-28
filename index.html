@@ -2,30 +2,283 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Solicitudes de Crédito</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Solicitud de Crédito - INKA CORP</title>
   <style>
-    /* Estilos para que el iframe ocupe toda la pantalla */
+    :root {
+      --verde-inka: #0b5334;
+      --naranja-inka: #e8632d;
+      --amarillo-inka: #fbc02d;
+      --fondo-gris: #f4f7f6;
+    }
+
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden; /* Evita barras de scroll en el cuerpo de la página */
+      width: 100%;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--fondo-gris);
+      overflow: hidden;
     }
+
+    /* Iframe del Chat (Oculto al inicio) */
     iframe {
-      border: none; /* Quita el borde del iframe */
+      border: none;
+      width: 100%;
+      height: 100%;
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* Overlay de bloqueo centrado */
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.75);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    /* Contenedor Responsive */
+    #terms-container {
+      background: white;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      border-top: 8px solid var(--naranja-inka);
+      overflow: hidden;
+      animation: zoomIn 0.3s ease-out;
+    }
+
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .terms-header {
+      padding: 15px;
+      text-align: center;
+      background: white;
+      border-bottom: 1px solid #eee;
+    }
+
+    .terms-header img {
+      max-width: 80px;
+      height: auto;
+    }
+
+    .terms-header h2 {
+      margin: 10px 0 0 0;
+      color: var(--verde-inka);
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Cuerpo con scroll */
+    .terms-body {
+      padding: 20px 25px;
+      overflow-y: auto;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .terms-body h3 {
+      font-size: 15px;
+      color: var(--verde-inka);
+      margin-top: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .terms-body p {
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+
+    .terms-body ul {
+      padding-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    .terms-body li {
+      margin-bottom: 8px;
+    }
+
+    /* Caja de Aceptación Final */
+    .final-declaration {
+      background: #fff3e0;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 5px solid var(--amarillo-inka);
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    /* Botones */
+    .terms-footer {
+      padding: 15px 25px;
+      background: #f9f9f9;
+      display: flex;
+      gap: 15px;
+      border-top: 1px solid #eee;
+    }
+
+    button {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: 0.2s;
+    }
+
+    .btn-accept {
+      background-color: var(--verde-inka);
+      color: white;
+    }
+
+    .btn-accept:hover { background-color: #083d26; }
+
+    .btn-cancel {
+      background-color: #e0e0e0;
+      color: #666;
+    }
+
+    /* Pantalla de Rechazo */
+    #rejection-box {
+      display: none;
+      text-align: center;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 400px;
     }
   </style>
 </head>
 <body>
 
-  <iframe 
-    src="https://lpbot.luispintasolutions.com/solicitudcreditos" 
-    width="100%" 
-    height="100%">
-  </iframe>
+  <div id="overlay">
+    <div id="terms-container">
+      <div class="terms-header">
+        <img src="https://raw.githubusercontent.com/InkaCorp1/InkaCorp1.github.io/main/Inka%20Corp%20grande.png" onerror="this.style.display='none'" alt="Inka Corp Logo">
+        <h2>Términos y Condiciones</h2>
+      </div>
 
+      <div class="terms-body">
+        <p><strong>TÉRMINOS Y CONDICIONES DE USO, POLÍTICA DE PRIVACIDAD Y AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES – INKA CORP</strong></p>
+
+        <h3>1. INTRODUCCIÓN Y ACEPTACIÓN</h3>
+        <p>El presente documento constituye un contrato vinculante entre el solicitante (en adelante, el "SOCIO") e INKA CORP. Al acceder, navegar o utilizar la plataforma de solicitud de crédito de INKA CORP, el SOCIO declara haber leído, entendido y aceptado en su totalidad los presentes Términos y Condiciones. La aceptación de estos términos es un requisito indispensable y obligatorio para procesar cualquier solicitud de financiamiento.</p>
+
+        <h3>2. DECLARACIÓN DE VERACIDAD</h3>
+        <p>El SOCIO declara bajo juramento que toda la información proporcionada en el formulario de solicitud es veraz, completa y actual. El SOCIO reconoce que cualquier omisión, error o falsedad en los datos suministrados facultará a INKA CORP a:</p>
+        <ul>
+          <li>Denegar la solicitud de crédito de forma inmediata.</li>
+          <li>Resolver (cancelar) cualquier contrato vigente de manera unilateral.</li>
+          <li>Iniciar las acciones legales pertinentes por falsedad en documento privado o fraude.</li>
+        </ul>
+
+        <h3>3. DETALLE EXHAUSTIVO DEL TRATAMIENTO DE DATOS</h3>
+        <p>En cumplimiento de la normativa vigente de Protección de Datos Personales, el SOCIO autoriza de manera libre y explícita a INKA CORP para tratar los siguientes datos:</p>
+        <ul>
+          <li><strong>Identificación Personal:</strong> (Nombres, apellidos, cédula de identidad, huella digital, imagen facial). Para validar identidad y prevenir suplantación.</li>
+          <li><strong>Datos de Contacto:</strong> (Teléfonos, correos electrónicos, domicilios verificados). Para envío de estados de cuenta, notificaciones de cobranza y alertas.</li>
+          <li><strong>Información Laboral y Previsional:</strong> (Empleador, cargo, sueldo, antigüedad, aportes). Para determinar capacidad real de pago.</li>
+          <li><strong>Información Financiera y Patrimonial:</strong> (Estados de cuenta, propiedades, deudas vigentes). Para análisis de riesgo crediticio.</li>
+          <li><strong>Geolocalización:</strong> Captura de ubicación del dispositivo para prevenir fraudes cibernéticos y validar zonas permitidas.</li>
+        </ul>
+
+        <h3>4. CLÁUSULA ESPECIAL: CENTRALES DE RIESGO Y BURÓ DE CRÉDITO</h3>
+        <p>El SOCIO autoriza irrevocablemente a INKA CORP para:</p>
+        <ul>
+          <li><strong>Consulta:</strong> Verificar el comportamiento crediticio y financiero en cualquier central de riesgo (públicas o privadas) y en el Buró de Crédito que la empresa estime conveniente.</li>
+          <li><strong>Facultad de Revisión:</strong> El SOCIO reconoce que la consulta al Buró es discrecional; INKA CORP puede o no realizarla según sus políticas de riesgo sin afectar la validez de la evaluación.</li>
+          <li><strong>Reporte:</strong> Reportar a las centrales de riesgo el cumplimiento o incumplimiento de obligaciones (moras, castigos o pagos puntuales).</li>
+        </ul>
+
+        <h3>5. FINALIDADES ADICIONALES Y TRANSFERENCIA</h3>
+        <p>Los datos podrán ser compartidos con:</p>
+        <ul>
+          <li>Proveedores de Servicios: Almacenamiento en nube, pasarelas de pago y call centers de cobranza.</li>
+          <li>Autoridades: Organismos judiciales o administrativos bajo requerimiento legal.</li>
+          <li>Análisis de Datos: Procesamiento estadístico para mejora de productos.</li>
+        </ul>
+
+        <h3>6. CESIÓN DE POSICIÓN CONTRACTUAL</h3>
+        <p>El SOCIO autoriza expresamente a INKA CORP para que esta pueda ceder, transferir o negociar el crédito solicitado, su posición contractual o los derechos de cobro derivados de la relación comercial a favor de terceros, ya sean personas naturales o jurídicas, sin necesidad de notificación previa o nueva autorización.</p>
+
+        <h3>7. PREVENCIÓN DE LAVADO DE ACTIVOS</h3>
+        <p>El SOCIO declara bajo juramento que sus ingresos provienen de actividades lícitas y que no se encuentra vinculado a investigaciones por lavado de activos o financiamiento de delitos. Autoriza a INKA CORP a realizar verificaciones en listas de control nacionales e internacionales.</p>
+
+        <h3>8. SEGURIDAD Y RESPONSABILIDAD TECNOLÓGICA</h3>
+        <p>INKA CORP garantiza medidas de seguridad para evitar el acceso no autorizado a los datos. No obstante, el SOCIO es responsable de la confidencialidad de sus credenciales. INKA CORP no se responsabiliza por interrupciones técnicas, virus o fallos en la conexión de internet del SOCIO que impidan el uso de la plataforma.</p>
+
+        <h3>9. EJERCICIO DE DERECHOS ARCO</h3>
+        <p>El SOCIO puede actualizar o rectificar sus datos bajo el siguiente procedimiento:</p>
+        <ul>
+          <li><strong>Canal Autorizado:</strong> Exclusivamente vía WhatsApp oficial de Atención al Cliente de INKA CORP.</li>
+          <li><strong>Requisitos:</strong> Adjuntar fotografía nítida del documento de identidad ecuatoriano y detalle claro del cambio solicitado.</li>
+          <li><strong>Restricción:</strong> El derecho de Cancelación o Supresión no podrá ejercerse mientras exista una solicitud en curso o una deuda pendiente.</li>
+        </ul>
+
+        <h3>10. CONSENTIMIENTO PARA NOTIFICACIONES VÍA WHATSAPP</h3>
+        <p>El SOCIO autoriza que el número de WhatsApp utilizado para la solicitud sea el canal oficial para recibir confirmaciones de aprobación, recordatorios de pago y gestiones de cobranza.</p>
+
+        <h3>11. MODIFICACIÓN DE TÉRMINOS</h3>
+        <p>INKA CORP podrá modificar estos términos en cualquier momento. El uso de la plataforma posterior implica la aceptación de las nuevas condiciones.</p>
+
+        <h3>12. JURISDICCIÓN Y LEY APLICABLE</h3>
+        <p>Para cualquier controversia, las partes se someten de manera expresa e irrevocable a la competencia territorial de los <strong>Jueces y Tribunales del Cantón Mejía, con sede en la ciudad de Machachi</strong>, renunciando el SOCIO a cualquier otro fuero.</p>
+
+        <div class="final-declaration">
+          DECLARACIÓN DE ACEPTACIÓN FINAL: Al presionar "ACEPTAR TÉRMINOS Y CONTINUAR", declaro haber leído íntegramente los 12 puntos, autorizo el tratamiento de mis datos y la consulta al Buró de Crédito, asumiendo responsabilidad legal por la veracidad de mi información.
+        </div>
+      </div>
+
+      <div class="terms-footer">
+        <button class="btn-cancel" onclick="cancelar()">Cancelar</button>
+        <button class="btn-accept" onclick="aceptar()">Aceptar Términos y Continuar</button>
+      </div>
+    </div>
+
+    <div id="rejection-box">
+      <h2 style="color: var(--naranja-inka)">Acceso Denegado</h2>
+      <p>Debe aceptar los términos para proceder con su solicitud de crédito.</p>
+      <button class="btn-accept" onclick="location.reload()">Volver a intentar</button>
+    </div>
+  </div>
+
+  <iframe id="chat-frame" src="https://lpbot.luispintasolutions.com/solicitudcreditos"></iframe>
+
+  <script>
+    function aceptar() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('chat-frame').style.display = 'block';
+    }
+
+    function cancelar() {
+      document.getElementById('terms-container').style.display = 'none';
+      document.getElementById('rejection-box').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
